@@ -4,7 +4,7 @@ import com.sirlopu.msscbrewery.domain.Customer;
 import com.sirlopu.msscbrewery.web.model.CustomerDto;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(uses = {DateMapper.class})
 public interface CustomerMapper {
 
     CustomerDto customerToCustomerDto(Customer customer);
