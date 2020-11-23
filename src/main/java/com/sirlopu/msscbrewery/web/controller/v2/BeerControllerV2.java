@@ -2,6 +2,9 @@ package com.sirlopu.msscbrewery.web.controller.v2;
 
 import com.sirlopu.msscbrewery.web.model.v2.BeerDtoV2;
 import com.sirlopu.msscbrewery.web.services.v2.BeerServiceV2;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
+@RequiredArgsConstructor
 @Validated
 @RequestMapping("/api/v2/beer")
 @RestController
@@ -22,9 +27,10 @@ public class BeerControllerV2 {
 
     private final BeerServiceV2 beerService;
 
-    public BeerControllerV2(BeerServiceV2 beerService) {
-        this.beerService = beerService;
-    }
+    // removed it to use lombok @requiredargsconstructor annotation
+    //public BeerControllerV2(BeerServiceV2 beerService) {
+    //    this.beerService = beerService;
+    //}
 
     @GetMapping({"/{beerId}"})
     public ResponseEntity<BeerDtoV2> getBeer (@NotNull @PathVariable("beerId") UUID beerId){
@@ -35,9 +41,13 @@ public class BeerControllerV2 {
     @PostMapping
     public ResponseEntity handlePost (@Valid @NotNull @RequestBody BeerDtoV2 beerDto){
 
-        BeerDtoV2 savedDto = beerService.saveNewBeer(beerDto);
+        log.debug("in handle post...");
 
-        HttpHeaders headers = new HttpHeaders();
+        val savedDto = beerService.saveNewBeer(beerDto);
+        //BeerDtoV2 savedDto = beerService.saveNewBeer(beerDto);
+
+        var headers = new HttpHeaders();
+        //HttpHeaders headers = new HttpHeaders();
         //TODO add hostname to url
         headers.add("Location", "/api/v2/beer" + savedDto.getId().toString());
 
